@@ -22,5 +22,5 @@ android {
 dependencies {
     implementation 'com.facebook.react:react-native:+'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-    implementation 'com.github.innocells:ucrop:2.2.7-native'
+    implementation 'com.github.innocells:ucrop:2.2.8-native'
 }
