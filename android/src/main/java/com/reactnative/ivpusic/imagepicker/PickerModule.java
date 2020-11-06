@@ -631,6 +631,10 @@ class PickerModule extends ReactContextBaseJavaModule implements ActivityEventLi
         if (cropperToolbarWidgetColor != null) {
             options.setToolbarWidgetColor(Color.parseColor(cropperToolbarWidgetColor));
         }
+
+        if (cropperBackgroundColor != null){
+            options.setRootViewBackgroundColor(Color.parseColor(cropperBackgroundColor));
+        }
     }
 
     private String resolveExtension(final Activity activity, final Uri uri, boolean isCamera)  throws Exception{
