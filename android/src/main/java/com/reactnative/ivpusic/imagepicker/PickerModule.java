@@ -640,6 +640,7 @@ class PickerModule extends ReactContextBaseJavaModule implements ActivityEventLi
 
         if (cropperBackgroundColor != null){
             options.setRootViewBackgroundColor(Color.parseColor(cropperBackgroundColor));
+            options.setLogoColor(Color.parseColor(cropperBackgroundColor));
         }
 
         if (cropperDimmedLayerColor != null){
