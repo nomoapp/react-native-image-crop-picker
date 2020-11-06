@@ -643,7 +643,7 @@ class PickerModule extends ReactContextBaseJavaModule implements ActivityEventLi
         }
 
         if (cropperDimmedLayerColor != null){
-            options.setDimmedLayerColor(Color.parseColor(cropperBackgroundColor));
+            options.setDimmedLayerColor(Color.parseColor(cropperDimmedLayerColor));
         }
 
         if (cropperFrameColor != null){
