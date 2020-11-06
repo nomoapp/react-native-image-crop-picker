@@ -643,6 +643,7 @@ class PickerModule extends ReactContextBaseJavaModule implements ActivityEventLi
 
         if (cropperFrameColor != null){
             options.setCropFrameColor(Color.parseColor(cropperFrameColor));
+            options.setCropGridCornerColor(Color.parseColor(cropperFrameColor));
         }
     }
 
