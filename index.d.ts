@@ -271,10 +271,35 @@ declare module "react-native-image-crop-picker" {
           cropperRotateButtonsHidden?: boolean
 
         /**
-         * Background cropper color (Android).
+         * Cropper background color (Android).
          *
          */
         cropperBackgroundColor?: string;
+
+        /**
+         * Cropper frame color (Android).
+         *
+         */
+         cropperFrameColor?: string;
+
+        /**
+         * Cropper dimmed layer color (Android).
+         *
+         */
+         cropperDimmedLayerColor
+
+
+        /**
+         * Cropper cancel color (iOS).
+         *
+         */
+         cropperCancelColor
+
+        /**
+         * Cropper done color (iOS).
+         *
+         */
+         cropperDoneColor
 
         /**
          * Whether to show the 3x3 grid on top of the image during cropping.

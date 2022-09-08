@@ -754,7 +754,8 @@ class PickerModule extends ReactContextBaseJavaModule implements ActivityEventLi
             return ".jpg";
         }
         String fileExt = resolveRealPath(activity, uri, false);
-        return fileExt.substring(fileExt.lastIndexOf("."));
+
+        return compression.determineFileExtension(fileExt.substring(fileExt.lastIndexOf("."), forceJpg);
     }
 
 
@@ -856,7 +857,8 @@ class PickerModule extends ReactContextBaseJavaModule implements ActivityEventLi
 
             if (cropping) {
                 UCrop.Options options = new UCrop.Options();
-                options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
+                String extension = resolveExtension(activity, uri, isCamera);
+                options.setCompressionFormat(compression.determineCompressionFromFileExtension(extension));
                 startCropping(activity, uri, true);
             } else {
                 try {

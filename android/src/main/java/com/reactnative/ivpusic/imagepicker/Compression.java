@@ -65,7 +65,7 @@ class Compression {
             imageDirectory.mkdirs();
         }
 
-        String fileExtension = forceJpg ? ".jpg" : originalImagePath.substring(originalImagePath.lastIndexOf("."));
+        String fileExtension = determineFileExtension(originalImagePath, forceJpg);
 
         File resizeImageFile = new File(imageDirectory, UUID.randomUUID() + fileExtension);
 
@@ -169,5 +169,19 @@ class Compression {
             return Bitmap.CompressFormat.PNG;
         }
         return Bitmap.CompressFormat.JPEG;
+    }
+
+    String determineFileExtension(String path, Boolean forceJpg){
+        if (forceJpg){
+            return ".jpg";
+        }
+        
+        const extension = originalImagePath.substring(originalImagePath.lastIndexOf("."));
+
+        if(extension.equals(".png")) {
+            return ".png";
+        }
+
+        return ".jpg";
     }
 }

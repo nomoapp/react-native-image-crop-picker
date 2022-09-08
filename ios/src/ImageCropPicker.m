@@ -963,21 +963,15 @@ RCT_EXPORT_METHOD(openCropper:(NSDictionary *)options
         cropVC.doneButtonTitle = [self.options objectForKey:@"cropperChooseText"];
         cropVC.cancelButtonTitle = [self.options objectForKey:@"cropperCancelText"];
         cropVC.rotateButtonsHidden = [[self.options objectForKey:@"cropperRotateButtonsHidden"] boolValue];
-        
-        // Añadido -->
+
         cropVC.showOnlyIcons = true;
         cropVC.cancelButtonColor = [self colorWithHexString: [self.options objectForKey:@"cropperCancelColor"]];
-        cropVC.doneButtonColor = [self colorWithHexString: [self.options objectForKey:@"cropperChooseColor"]];
+        cropVC.doneButtonColor = [self colorWithHexString: [self.options objectForKey:@"cropperDoneColor"]];
         cropVC.aspectRatioPickerButtonHidden = true;
         cropVC.resetButtonHidden = true;
         cropVC.toolbarPosition = TOCropViewControllerToolbarPositionTop;
-        // <--
 
         cropVC.modalPresentationStyle = UIModalPresentationFullScreen;
-        if (@available(iOS 15.0, *)) {
-            cropVC.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-        }
-        
         if (@available(iOS 15.0, *)) {
             cropVC.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
         }
