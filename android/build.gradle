@@ -22,5 +22,9 @@ android {
 dependencies {
     implementation 'com.facebook.react:react-native:+'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-    implementation 'com.github.yalantis:ucrop:2.2.8-native'
+    implementation "androidx.appcompat:appcompat:1.1.0"
+    implementation "androidx.exifinterface:exifinterface:1.1.0-beta01"
+    implementation "androidx.transition:transition:1.2.0-rc01"
+    // OkHttp3 versions above 3.12.x don't support pre-Lollipop Android versions (API 21)
+    implementation "com.squareup.okhttp3:okhttp:3.12.13"
 }
