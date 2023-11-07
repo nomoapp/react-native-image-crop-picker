@@ -402,7 +402,7 @@ declare module "react-native-image-crop-picker" {
         /**
          * Extracted exif data from image. Response format is platform specific.
          */
-        exif?: null | object;
+        exif?: any;
 
         /**
          * Selected image's localidentifier, used for PHAsset searching.
