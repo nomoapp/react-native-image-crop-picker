@@ -951,10 +951,6 @@ RCT_EXPORT_METHOD(openCropper:(NSDictionary *)options
         if (@available(iOS 15.0, *)) {
             cropVC.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
         }
-        
-        if (@available(iOS 15.0, *)) {
-            cropVC.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-        }
 
         [[self getRootVC] presentViewController:cropVC animated:FALSE completion:nil];
     });
