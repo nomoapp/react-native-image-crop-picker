@@ -348,7 +348,7 @@ declare module "react-native-image-crop-picker" {
         compressImageQuality?: number;
     }
 
-    type CropperOptions = ImageOptions & {
+    export type CropperOptions = ImageOptions & {
         /**
          * Selected image location
          */
