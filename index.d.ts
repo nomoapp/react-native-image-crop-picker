@@ -420,8 +420,6 @@ declare module "react-native-image-crop-picker" {
 
         /**
          * Selected image/video's filename.
-         *
-         * @platform iOS only
          */
         filename?: string;
 
