@@ -35,8 +35,8 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.modules.core.PermissionAwareActivity;
 import com.facebook.react.modules.core.PermissionListener;
-import com.yalantis.ucrop.UCrop;
-import com.yalantis.ucrop.UCropActivity;
+import com.reactnative.ivpusic.imagepicker.UCrop;
+import com.reactnative.ivpusic.imagepicker.UCropActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

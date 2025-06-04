@@ -23,7 +23,7 @@
         </provider>
 
         <activity
-            android:name="com.yalantis.ucrop.UCropActivity"
+            android:name="com.reactnative.ivpusic.imagepicker.UCropActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
 
