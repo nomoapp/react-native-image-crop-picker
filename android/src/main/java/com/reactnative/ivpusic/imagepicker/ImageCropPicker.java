@@ -731,7 +731,6 @@ class ImageCropPicker implements ActivityEventListener {
 
         if (cropperFrameColor != null){
             options.setCropFrameColor(Color.parseColor(cropperFrameColor));
-            options.setCropGridCornerColor(Color.parseColor(cropperFrameColor));
         }
     }
 
