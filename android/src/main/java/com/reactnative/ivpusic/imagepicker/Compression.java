@@ -34,7 +34,8 @@ class Compression {
             int originalHeight,
             int maxWidth,
             int maxHeight,
-            int quality
+            int quality,
+            boolean forceJpg
     ) throws IOException,OutOfMemoryError {
         Pair<Integer, Integer> targetDimensions =
                 this.calculateTargetDimensions(originalWidth, originalHeight, maxWidth, maxHeight);
@@ -64,10 +65,13 @@ class Compression {
             imageDirectory.mkdirs();
         }
 
-        File resizeImageFile = new File(imageDirectory, UUID.randomUUID() + ".jpg");
+        String fileExtension = forceJpg ? ".jpg" : originalImagePath.substring(originalImagePath.lastIndexOf("."));
+
+        File resizeImageFile = new File(imageDirectory, UUID.randomUUID() + fileExtension);
 
         OutputStream os = new BufferedOutputStream(new FileOutputStream(resizeImageFile));
-        bitmap.compress(Bitmap.CompressFormat.JPEG, quality, os);
+        Bitmap.CompressFormat compressFormat = determineCompressionFromFileExtension(fileExtension);
+        bitmap.compress(compressFormat, quality, os);
 
         // Don't set unnecessary exif attribute
         if (shouldSetOrientation(originalOrientation)) {
@@ -131,7 +135,8 @@ class Compression {
         if (maxWidth == null) maxWidth = bitmapOptions.outWidth;
         if (maxHeight == null) maxHeight = bitmapOptions.outHeight;
 
-        return resize(context, originalImagePath, bitmapOptions.outWidth, bitmapOptions.outHeight, maxWidth, maxHeight, targetQuality);
+        Boolean forceJpg = options.hasKey("forceJpg") ? options.getBoolean("forceJpg") : false;
+        return resize(context, originalImagePath, bitmapOptions.outWidth, bitmapOptions.outHeight, maxWidth, maxHeight, targetQuality, forceJpg);
     }
 
     private Pair<Integer, Integer> calculateTargetDimensions(int currentWidth, int currentHeight, int maxWidth, int maxHeight) {
@@ -157,5 +162,12 @@ class Compression {
         // todo: video compression
         // failed attempt 1: ffmpeg => slow and licensing issues
         promise.resolve(originalVideo);
+    }
+
+    Bitmap.CompressFormat determineCompressionFromFileExtension(String extension){
+        if (extension.equals(".png")){
+            return Bitmap.CompressFormat.PNG;
+        }
+        return Bitmap.CompressFormat.JPEG;
     }
 }

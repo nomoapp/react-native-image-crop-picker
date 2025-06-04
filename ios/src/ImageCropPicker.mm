@@ -524,6 +524,21 @@ RCT_EXPORT_METHOD(openCropper:(NSDictionary *)options
     return @"";
 }
 
+- (NSString *)determineMimeTypeFromFormat:(NSString *)format {
+    if ([format isEqual: @"png"]) {
+        return @"image/png";
+    }
+    return @"image/jpeg";
+}
+
+- (NSString *)determineExtensionFromMimeType:(NSString *)mimeType {
+    if ([mimeType isEqual: @"image/png"]) {
+        return @"png";
+    }
+    return @"jpg";
+}
+
+
 - (void)qb_imagePickerController:(QBImagePickerController *)imagePickerController
           didFinishPickingAssets:(NSArray *)assets {
     
@@ -599,7 +614,7 @@ RCT_EXPORT_METHOD(openCropper:(NSDictionary *)options
                                     NSNumber *maxHeight = [self.options valueForKey:@"compressImageMaxHeight"];
                                     Boolean useOriginalHeight = (maxHeight == nil || [maxHeight integerValue] >= imgT.size.height);
                                     
-                                    NSString *mimeType = [self determineMimeTypeFromImageData:imageData];
+                                    NSString *mimeType = forceJpg ? @"image/jpeg" : [self determineMimeTypeFromImageData:imageData];
                                     Boolean isKnownMimeType = [mimeType length] > 0;
                                     
                                     ImageResult *imageResult = [[ImageResult alloc] init];
@@ -611,7 +626,7 @@ RCT_EXPORT_METHOD(openCropper:(NSDictionary *)options
                                         imageResult.mime = mimeType;
                                         imageResult.image = imgT;
                                     } else {
-                                        imageResult = [self.compression compressImage:[imgT fixOrientation] withOptions:self.options];
+                                        imageResult = [self.compression compressImage:[imgT fixOrientation] withOptions:self.options mimeType:mimeType];
                                     }
                                     
                                     NSString *filePath = @"";
@@ -726,6 +741,12 @@ RCT_EXPORT_METHOD(openCropper:(NSDictionary *)options
     }]];
 }
 
+- (NSString*)getFormatWithFilename:(NSString*)filename {
+    NSArray *filenameSplited = [filename componentsSeparatedByString:@"."];
+    NSString *extension = [filenameSplited valueForKey: @"@lastObject"];
+    return [extension lowercaseString];
+}
+
 // when user selected single image, with camera or from photo gallery,
 // this method will take care of attaching image metadata, and sending image to cropping controller
 // or to user directly
@@ -737,6 +758,10 @@ RCT_EXPORT_METHOD(openCropper:(NSDictionary *)options
         }]];
         return;
     }
+
+    Boolean forceJpg = [[self.options valueForKey:@"forceJpg"] boolValue];
+    NSString *outputFormat = forceJpg ? @"jpg" : [self getFormatWithFilename:filename];
+    NSString *mimeType = [self determineMimeTypeFromFormat:outputFormat];
     
     NSLog(@"id: %@ filename: %@", localIdentifier, filename);
     
@@ -747,11 +772,12 @@ RCT_EXPORT_METHOD(openCropper:(NSDictionary *)options
         self.croppingFile[@"filename"] = filename;
         self.croppingFile[@"creationDate"] = creationDate;
         self.croppingFile[@"modifcationDate"] = modificationDate;
+        self.croppingFile[@"mimeType"] = mimeType;
         NSLog(@"CroppingFile %@", self.croppingFile);
         
         [self cropImage:[image fixOrientation]];
     } else {
-        ImageResult *imageResult = [self.compression compressImage:[image fixOrientation]  withOptions:self.options];
+        ImageResult *imageResult = [self.compression compressImage:[image fixOrientation]  withOptions:self.options mimeType:mimeType];
         NSString *filePath = [self persistFile:imageResult.data];
         if (filePath == nil) {
             [viewController dismissViewControllerAnimated:YES completion:[self waitAnimationEnd:^{
@@ -813,7 +839,7 @@ RCT_EXPORT_METHOD(openCropper:(NSDictionary *)options
                                          [[[self options] objectForKey:@"height"] intValue]);
     
     UIImage *resizedImage = [croppedImage resizedImageToFitInSize:desiredImageSize scaleIfSmaller:YES];
-    ImageResult *imageResult = [self.compression compressImage:resizedImage withOptions:self.options];
+    ImageResult *imageResult = [self.compression compressImage:resizedImage withOptions:self.options mimeType:self.croppingFile[@"mimeType"]];
     
     NSString *filePath = [self persistFile:imageResult.data];
     if (filePath == nil) {
@@ -853,7 +879,10 @@ RCT_EXPORT_METHOD(openCropper:(NSDictionary *)options
     // create temp file
     NSString *tmpDirFullPath = [self getTmpDirectory];
     NSString *filePath = [tmpDirFullPath stringByAppendingString:[[NSUUID UUID] UUIDString]];
-    filePath = [filePath stringByAppendingString:@".jpg"];
+    Boolean forceJpg = [[self.options valueForKey:@"forceJpg"] boolValue];
+    NSString *mimeType = forceJpg ? @"image/jpeg" : [self determineMimeTypeFromImageData:data];
+    NSString *extension = [@"." stringByAppendingString:[self determineExtensionFromMimeType:mimeType]];
+    filePath = [filePath stringByAppendingString:extension];
     
     // save cropped file
     BOOL status = [data writeToFile:filePath atomically:YES];
@@ -918,11 +947,18 @@ RCT_EXPORT_METHOD(openCropper:(NSDictionary *)options
         cropVC.cancelButtonTitle = [self.options objectForKey:@"cropperCancelText"];
         cropVC.rotateButtonsHidden = [[self.options objectForKey:@"cropperRotateButtonsHidden"] boolValue];
         
+        // Añadido -->
+        cropVC.showOnlyIcons = true;
+        cropVC.aspectRatioPickerButtonHidden = true;
+        cropVC.resetButtonHidden = true;
+        cropVC.toolbarPosition = TOCropViewControllerToolbarPositionTop;
+        // <--
+
         cropVC.modalPresentationStyle = UIModalPresentationFullScreen;
         if (@available(iOS 15.0, *)) {
             cropVC.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
         }
-        
+
         [[self getRootVC] presentViewController:cropVC animated:FALSE completion:nil];
     });
 }
