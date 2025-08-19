@@ -730,13 +730,8 @@ class ImageCropPicker implements ActivityEventListener {
             options.setCropFrameColor(Color.parseColor(cropperFrameColor));
         }
 
-        if (cropperStatusBarLight != null){
-            options.setStatusBarLight(cropperStatusBarLight);
-        }
-
-        if (cropperNavigationBarLight != null){
-            options.setNavigationBarLight(cropperStatusBarLight);
-        }
+        options.setStatusBarLight(cropperStatusBarLight);
+        options.setNavigationBarLight(cropperNavigationBarLight);
     }
 
     private String resolveExtension(final Activity activity, final Uri uri, boolean isCamera)  throws Exception{
