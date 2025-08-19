@@ -29,7 +29,6 @@ import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.PromiseImpl;
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
@@ -91,11 +90,12 @@ class ImageCropPicker implements ActivityEventListener {
     private boolean enableRotationGesture = false;
     private boolean disableCropperColorSetters = false;
     private boolean useFrontCamera = false;
+    private boolean cropperStatusBarLight = true;
+    private boolean cropperNavigationBarLight = false;
     private boolean forceJpg = false;
     private ReadableMap options;
 
     private String cropperActiveWidgetColor = null;
-    private String cropperStatusBarColor = null;
     private String cropperToolbarColor = null;
     private String cropperToolbarTitle = null;
     private String cropperToolbarWidgetColor = null;
@@ -136,7 +136,6 @@ class ImageCropPicker implements ActivityEventListener {
         maxFiles = options.hasKey("maxFiles") ? options.getInt("maxFiles") : maxFiles;
         cropping = options.hasKey("cropping") && options.getBoolean("cropping");
         cropperActiveWidgetColor = options.hasKey("cropperActiveWidgetColor") ? options.getString("cropperActiveWidgetColor") : null;
-        cropperStatusBarColor = options.hasKey("cropperStatusBarColor") ? options.getString("cropperStatusBarColor") : null;
         cropperToolbarColor = options.hasKey("cropperToolbarColor") ? options.getString("cropperToolbarColor") : null;
         cropperToolbarTitle = options.hasKey("cropperToolbarTitle") ? options.getString("cropperToolbarTitle") : null;
         cropperToolbarWidgetColor = options.hasKey("cropperToolbarWidgetColor") ? options.getString("cropperToolbarWidgetColor") : null;
@@ -151,6 +150,8 @@ class ImageCropPicker implements ActivityEventListener {
         enableRotationGesture = options.hasKey("enableRotationGesture") && options.getBoolean("enableRotationGesture");
         disableCropperColorSetters = options.hasKey("disableCropperColorSetters") && options.getBoolean("disableCropperColorSetters");
         useFrontCamera = options.hasKey("useFrontCamera") && options.getBoolean("useFrontCamera");
+        cropperStatusBarLight = options.hasKey("cropperStatusBarLight") ? options.getBoolean("cropperStatusBarLight") : true;
+        cropperNavigationBarLight = options.hasKey("cropperNavigationBarLight") ? options.getBoolean("cropperNavigationBarLight") : false;
         forceJpg = options.hasKey("forceJpg") && options.getBoolean("forceJpg");
         this.options = options;
     }
@@ -712,10 +713,6 @@ class ImageCropPicker implements ActivityEventListener {
             options.setToolbarColor(Color.parseColor(cropperToolbarColor));
         }
 
-        if (cropperStatusBarColor != null) {
-            options.setStatusBarColor(Color.parseColor(cropperStatusBarColor));
-        }
-
         if (cropperToolbarWidgetColor != null) {
             options.setToolbarWidgetColor(Color.parseColor(cropperToolbarWidgetColor));
         }
@@ -731,6 +728,14 @@ class ImageCropPicker implements ActivityEventListener {
 
         if (cropperFrameColor != null){
             options.setCropFrameColor(Color.parseColor(cropperFrameColor));
+        }
+
+        if (cropperStatusBarLight != null){
+            options.setStatusBarLight(cropperStatusBarLight);
+        }
+
+        if (cropperNavigationBarLight != null){
+            options.setNavigationBarLight(cropperStatusBarLight);
         }
     }
 
